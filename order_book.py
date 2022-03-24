@@ -22,15 +22,17 @@ def process_order(order):
         session.commit()
         return
 
-    result.filled = datetime.now()
-    result.counterparty_id = order_obj.id
-    session.commit()
-
     order_obj.filled = datetime.now()
     order_obj.counterparty_id = result.id
 
     session.add(order_obj)
     session.commit()
+
+    result.filled = datetime.now()
+    result.counterparty_id = order_obj.id
+    session.commit()
+
+    # print(result.id, result.counterparty_id, order_obj.id, order_obj.counterparty_id)
 
     if order_obj.buy_amount > result.sell_amount:
         new_buy_amount = order_obj.buy_amount - result.sell_amount
@@ -39,8 +41,6 @@ def process_order(order):
         new_order = {'buy_currency': order_obj.buy_currency, 'sell_currency': order_obj.sell_currency,
                      'buy_amount': new_buy_amount, 'sell_amount': new_sell_amount, 'sender_pk': order_obj.sender_pk,
                      'receiver_pk': order_obj.receiver_pk, 'creator_id': order_obj.id}
-
-        # print(new_order.get('buy_currency'), type(new_order.get('buy_currency')))
 
         process_order(new_order)
 
@@ -51,8 +51,6 @@ def process_order(order):
         new_order = {'buy_currency': result.buy_currency, 'sell_currency': result.sell_currency,
                      'buy_amount': new_buy_amount, 'sell_amount': new_sell_amount, 'sender_pk': result.sender_pk,
                      'receiver_pk': result.receiver_pk, 'creator_id': result.id}
-
-        # print(new_order.get('buy_currency'), type(new_order.get('buy_currency')))
 
         process_order(new_order)
 
