@@ -36,22 +36,22 @@ def process_order(order):
 
     if order_obj.buy_amount > result.sell_amount:
         new_buy_amount = order_obj.buy_amount - result.sell_amount
-        new_sell_amount = new_buy_amount * order_obj.buy_amount / order_obj.sell_amount
+        new_sell_amount = new_buy_amount * result.buy_amount / result.sell_amount
 
         new_order = {'buy_currency': order_obj.buy_currency, 'sell_currency': order_obj.sell_currency,
                      'buy_amount': new_buy_amount, 'sell_amount': new_sell_amount, 'sender_pk': order_obj.sender_pk,
                      'receiver_pk': order_obj.receiver_pk, 'creator_id': order_obj.id}
-
+        # print(new_buy_amount, new_sell_amount)
         process_order(new_order)
 
     if order_obj.buy_amount < result.sell_amount:
-        new_buy_amount = result.buy_amount - order_obj.sell_amount
-        new_sell_amount = new_buy_amount * order_obj.buy_amount / order_obj.sell_amount
+        new_sell_amount = result.sell_amount - order_obj.buy_amount
+        new_buy_amount = new_sell_amount * result.buy_amount / result.sell_amount
 
         new_order = {'buy_currency': result.buy_currency, 'sell_currency': result.sell_currency,
                      'buy_amount': new_buy_amount, 'sell_amount': new_sell_amount, 'sender_pk': result.sender_pk,
                      'receiver_pk': result.receiver_pk, 'creator_id': result.id}
-
+        # print(new_buy_amount, new_sell_amount)
         process_order(new_order)
 
     pass
