@@ -35,7 +35,7 @@ def process_order(order):
     session.commit()
 
     order_obj.filled = datetime.now()
-    order_obj.counterparty_id = result.counterparty_id
+    order_obj.counterparty_id = result.id
 
     session.add(order_obj)
     session.commit()
